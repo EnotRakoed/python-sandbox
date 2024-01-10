@@ -1,0 +1,29 @@
+version: '3.9'
+
+services:
+
+# Образ нашего Django приложения
+  python:
+    container_name: django
+    build:
+      context: docker
+      target: dev-envs
+    ports:
+      - "8077:8000"
+    volumes:
+      - ./src:/app/src
+      - /var/run/docker.sock:/var/run/docker.sock
+
+# База данных Postgresql
+  postgres:
+    container_name: sql
+    image: postgres:latest
+    restart: always
+    volumes:
+      - "./tmp/postgresql/data:/var/lib/postgresql/data"
+    environment:
+      POSTGRES_PASSWORD: password
+      TZ: Europe/Moscow
+      PGTZ: Europe/Moscow
+    ports:
+      - "5432:5432"
